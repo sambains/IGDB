@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import g33k.limited.igdb.core.dependencies.AppComponent;
 
 /**
  * Created by sambains on 19/12/2016.
@@ -22,7 +23,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayoutResourceId());
         unbinder = ButterKnife.bind(this);
 
-        injectDependencies();
+        injectDependencies(BaseApplication.getAppComponent());
     }
 
     @Override
@@ -32,7 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         unbinder.unbind();
     }
 
-    protected abstract void injectDependencies();
+    protected abstract void injectDependencies(AppComponent appComponent);
 
     protected abstract int getLayoutResourceId();
 }

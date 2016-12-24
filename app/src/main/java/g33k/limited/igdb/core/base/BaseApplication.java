@@ -16,7 +16,7 @@ import timber.log.Timber;
 
 public class BaseApplication extends Application {
 
-    private AppComponent appComponent;
+    private static AppComponent appComponent;
 
     @Override
     public void onCreate() {
@@ -30,15 +30,21 @@ public class BaseApplication extends Application {
                     .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                     .build());
         }
+
+        appComponent = createAppComponent();
     }
 
-    public AppComponent appComponent() {
+    private AppComponent createAppComponent() {
         if (appComponent == null) {
             appComponent = DaggerAppComponent.builder()
                     .appModule(new AppModule())
                     .build();
         }
 
+        return appComponent;
+    }
+
+    public static AppComponent getAppComponent() {
         return appComponent;
     }
 }

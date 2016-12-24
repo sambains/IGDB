@@ -8,7 +8,7 @@ import g33k.limited.igdb.core.dependencies.CustomScope;
  * Created by sambains on 20/12/2016.
  */
 @Module
-class DetailModule {
+public class DetailModule {
 
     private DetailContract.DetailView detailView;
 
@@ -20,5 +20,17 @@ class DetailModule {
     @CustomScope
     DetailContract.DetailView providesDetailView() {
         return detailView;
+    }
+
+    @Provides
+    @CustomScope
+    DetailContract.DetailPresenter providesDetailPresenter(DetailPresenter detailPresenter) {
+        return detailPresenter;
+    }
+
+    @Provides
+    @CustomScope
+    DetailContract.DetailInteractor providesDetailInteractor(DetailInteractor detailInteractor) {
+        return detailInteractor;
     }
 }

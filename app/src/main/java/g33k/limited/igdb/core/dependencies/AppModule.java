@@ -9,6 +9,8 @@ import dagger.Module;
 import dagger.Provides;
 import g33k.limited.igdb.BuildConfig;
 import g33k.limited.igdb.core.api.Api;
+import g33k.limited.igdb.core.util.AppSchedulerProvider;
+import g33k.limited.igdb.core.util.SchedulerProvider;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -22,6 +24,12 @@ import timber.log.Timber;
 public class AppModule {
 
     private static final String TAG = AppModule.class.getCanonicalName();
+
+    @Provides
+    @Singleton
+    SchedulerProvider providesSchedulerProvider() {
+        return new AppSchedulerProvider();
+    }
 
     @Provides
     @Singleton

@@ -8,17 +8,23 @@ import g33k.limited.igdb.core.dependencies.CustomScope;
  * Created by sambains on 20/12/2016.
  */
 @Module
-class HomeModule {
+public class HomeModule {
 
-    private HomeContract.HomeView view;
+    private HomeContract.HomeView homeView;
 
-    HomeModule(HomeContract.HomeView view) {
-        this.view = view;
+    HomeModule(HomeContract.HomeView homeView) {
+        this.homeView = homeView;
     }
 
     @Provides
     @CustomScope
     HomeContract.HomeView providesHomeView() {
-        return view;
+        return homeView;
+    }
+
+    @Provides
+    @CustomScope
+    HomeContract.HomePresenter providesHomePresenter(HomeContract.HomePresenter homePresenter) {
+        return homePresenter;
     }
 }

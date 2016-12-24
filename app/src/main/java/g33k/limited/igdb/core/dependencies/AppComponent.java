@@ -3,9 +3,10 @@ package g33k.limited.igdb.core.dependencies;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import g33k.limited.igdb.core.api.Api;
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
+import g33k.limited.igdb.feature.detail.DetailComponent;
+import g33k.limited.igdb.feature.detail.DetailModule;
+import g33k.limited.igdb.feature.home.HomeComponent;
+import g33k.limited.igdb.feature.home.HomeModule;
 
 /**
  * Created by sambains on 19/12/2016.
@@ -14,9 +15,7 @@ import retrofit2.Retrofit;
 @Component(modules = AppModule.class)
 public interface AppComponent {
 
-    Api api();
+    HomeComponent plus(HomeModule homeModule);
 
-    Retrofit retrofit();
-
-    OkHttpClient okHttpClient();
+    DetailComponent plus(DetailModule detailModule);
 }

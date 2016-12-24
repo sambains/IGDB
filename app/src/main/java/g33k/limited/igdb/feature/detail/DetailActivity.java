@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import g33k.limited.igdb.R;
 import g33k.limited.igdb.core.base.BaseActivity;
-import g33k.limited.igdb.core.base.BaseApplication;
+import g33k.limited.igdb.core.dependencies.AppComponent;
 import g33k.limited.igdb.core.models.Game;
 
 /**
@@ -31,7 +31,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.Detai
     }
 
     @Inject
-    DetailPresenter detailPresenter;
+    DetailContract.DetailPresenter detailPresenter;
 
     @BindView(R.id.progress)
     ProgressBar progressBar;
@@ -50,7 +50,6 @@ public class DetailActivity extends BaseActivity implements DetailContract.Detai
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         detailPresenter.getGame();
     }
 
@@ -62,11 +61,8 @@ public class DetailActivity extends BaseActivity implements DetailContract.Detai
     }
 
     @Override
-    protected void injectDependencies() {
-        DaggerDetailComponent.builder()
-                .appComponent(((BaseApplication) getApplicationContext()).appComponent())
-                .detailModule(new DetailModule(this))
-                .build()
+    protected void injectDependencies(AppComponent appComponent) {
+        appComponent.plus(new DetailModule(this))
                 .inject(this);
     }
 

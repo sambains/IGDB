@@ -8,20 +8,20 @@ import javax.inject.Inject;
 
 class HomePresenter implements HomeContract.HomePresenter {
 
-    private HomeContract.HomeView view;
+    private HomeContract.HomeView homeView;
 
     @Inject
-    HomePresenter(HomeContract.HomeView view) {
-        this.view = view;
+    HomePresenter(HomeContract.HomeView homeView) {
+        this.homeView = homeView;
     }
 
     @Override
     public void detachView() {
-        view = null;
+        homeView = null;
     }
 
     @Override
     public void showDetailScreen() {
-        view.navigateToDetailScreen();
+        homeView.navigateToDetailScreen();
     }
 }

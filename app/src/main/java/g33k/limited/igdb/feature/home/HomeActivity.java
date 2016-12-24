@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import butterknife.OnClick;
 import g33k.limited.igdb.R;
 import g33k.limited.igdb.core.base.BaseActivity;
-import g33k.limited.igdb.core.base.BaseApplication;
+import g33k.limited.igdb.core.dependencies.AppComponent;
 import g33k.limited.igdb.feature.detail.DetailActivity;
 
 public class HomeActivity extends BaseActivity implements HomeContract.HomeView {
@@ -30,11 +30,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
     }
 
     @Override
-    protected void injectDependencies() {
-        DaggerHomeComponent.builder()
-                .appComponent(((BaseApplication) getApplicationContext()).appComponent())
-                .homeModule(new HomeModule(this))
-                .build()
+    protected void injectDependencies(AppComponent appComponent) {
+        appComponent.plus(new HomeModule(this))
                 .inject(this);
     }
 
