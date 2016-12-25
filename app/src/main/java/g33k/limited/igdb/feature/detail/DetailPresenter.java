@@ -2,7 +2,6 @@ package g33k.limited.igdb.feature.detail;
 
 import javax.inject.Inject;
 
-import g33k.limited.igdb.core.util.SchedulerProvider;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -15,13 +14,11 @@ class DetailPresenter implements DetailContract.DetailPresenter {
     DetailContract.DetailInteractor detailInteractor;
 
     private DetailContract.DetailView detailView;
-    private SchedulerProvider schedulerProvider;
     private Disposable disposable;
 
     @Inject
-    DetailPresenter(DetailContract.DetailView detailView, SchedulerProvider schedulerProvider) {
+    DetailPresenter(DetailContract.DetailView detailView) {
         this.detailView = detailView;
-        this.schedulerProvider = schedulerProvider;
     }
 
     @Override
@@ -29,8 +26,6 @@ class DetailPresenter implements DetailContract.DetailPresenter {
         if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
         }
-
-        detailInteractor.unbind();
 
         detailView = null;
         detailInteractor = null;
@@ -41,7 +36,6 @@ class DetailPresenter implements DetailContract.DetailPresenter {
         detailView.showProgress();
 
         disposable = detailInteractor.getGame(gameId)
-                .observeOn(schedulerProvider.mainThread())
                 .subscribe(games -> {
                     detailView.showGame(games.get(0));
                     detailView.hideProgress();

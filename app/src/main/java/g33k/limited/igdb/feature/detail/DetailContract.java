@@ -2,7 +2,6 @@ package g33k.limited.igdb.feature.detail;
 
 import java.util.List;
 
-import g33k.limited.igdb.core.base.BaseInteractor;
 import g33k.limited.igdb.core.base.BasePresenter;
 import g33k.limited.igdb.core.models.Game;
 import io.reactivex.Observable;
@@ -29,7 +28,7 @@ interface DetailContract {
         void getGame(String gameId);
     }
 
-    interface DetailInteractor extends BaseInteractor {
+    interface DetailInteractor {
         Observable<List<Game>> getGame(String gameId);
     }
 }
