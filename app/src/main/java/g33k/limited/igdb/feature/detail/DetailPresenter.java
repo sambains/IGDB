@@ -2,6 +2,9 @@ package g33k.limited.igdb.feature.detail;
 
 import javax.inject.Inject;
 
+import g33k.limited.igdb.core.util.SchedulerProvider;
+import io.reactivex.disposables.Disposable;
+
 /**
  * Created by sambains on 19/12/2016.
  */
@@ -12,14 +15,21 @@ class DetailPresenter implements DetailContract.DetailPresenter {
     DetailContract.DetailInteractor detailInteractor;
 
     private DetailContract.DetailView detailView;
+    private SchedulerProvider schedulerProvider;
+    private Disposable disposable;
 
     @Inject
-    DetailPresenter(DetailContract.DetailView detailView) {
+    DetailPresenter(DetailContract.DetailView detailView, SchedulerProvider schedulerProvider) {
         this.detailView = detailView;
+        this.schedulerProvider = schedulerProvider;
     }
 
     @Override
     public void detachView() {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
+
         detailInteractor.unbind();
 
         detailView = null;
@@ -27,16 +37,18 @@ class DetailPresenter implements DetailContract.DetailPresenter {
     }
 
     @Override
-    public void getGame() {
+    public void getGame(String gameId) {
         detailView.showProgress();
 
-        detailInteractor.getGame(games -> {
-            detailView.showGame(games.get(0));
-            detailView.hideProgress();
-            detailView.showContent();
-        }, throwable -> {
-            detailView.showError(throwable.getMessage());
-            detailView.hideProgress();
-        }, "1020");
+        disposable = detailInteractor.getGame(gameId)
+                .observeOn(schedulerProvider.mainThread())
+                .subscribe(games -> {
+                    detailView.showGame(games.get(0));
+                    detailView.hideProgress();
+                    detailView.showContent();
+                }, throwable -> {
+                    detailView.showError(throwable.getMessage());
+                    detailView.hideProgress();
+                });
     }
 }

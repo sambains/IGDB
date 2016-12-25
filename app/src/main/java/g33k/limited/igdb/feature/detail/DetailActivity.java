@@ -50,7 +50,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.Detai
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        detailPresenter.getGame();
+        detailPresenter.getGame("1020");
     }
 
     @Override

@@ -9,8 +9,10 @@ import g33k.limited.igdb.core.api.Api;
 import g33k.limited.igdb.core.dependencies.CustomScope;
 import g33k.limited.igdb.core.models.Game;
 import g33k.limited.igdb.core.util.SchedulerProvider;
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * Created by sambains on 24/12/2016.
@@ -20,6 +22,7 @@ class DetailInteractor implements DetailContract.DetailInteractor {
 
     private Api api;
     private SchedulerProvider schedulerProvider;
+    private PublishSubject<List<Game>> publishSubject;
     private Disposable disposable;
 
     @Inject
@@ -29,11 +32,31 @@ class DetailInteractor implements DetailContract.DetailInteractor {
     }
 
     @Override
-    public void getGame(Consumer<List<Game>> onNext, Consumer<Throwable> onError, String gameId) {
-        disposable = api.getGame(BuildConfig.API_KEY, gameId)
-                .subscribeOn(schedulerProvider.backgroundThread())
-                .observeOn(schedulerProvider.mainThread())
-                .subscribe(onNext, onError);
+    public Observable<List<Game>> getGame(String gameId) {
+        if (disposable == null || disposable.isDisposed()) {
+            publishSubject = PublishSubject.create();
+
+            disposable = api.getGame(BuildConfig.API_KEY, gameId)
+                    .subscribeOn(schedulerProvider.backgroundThread())
+                    .subscribeWith(new DisposableObserver<List<Game>>() {
+                        @Override
+                        public void onNext(List<Game> games) {
+                            publishSubject.onNext(games);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            publishSubject.onError(e);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            publishSubject.onComplete();
+                        }
+                    });
+        }
+
+        return publishSubject.hide();
     }
 
     @Override
