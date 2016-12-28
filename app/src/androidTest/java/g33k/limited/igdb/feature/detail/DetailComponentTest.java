@@ -10,4 +10,5 @@ import g33k.limited.igdb.core.dependencies.CustomScope;
 @Subcomponent(modules = DetailModule.class)
 public interface DetailComponentTest extends DetailComponent {
 
+    void inject(DetailActivityTest detailActivityTest);
 }

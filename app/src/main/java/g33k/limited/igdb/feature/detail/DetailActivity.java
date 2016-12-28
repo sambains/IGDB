@@ -24,8 +24,6 @@ import g33k.limited.igdb.core.models.Game;
 
 public class DetailActivity extends BaseActivity implements DetailContract.DetailView {
 
-    public static final String TAG = DetailActivity.class.getCanonicalName();
-
     public static void startActivity(BaseActivity activity) {
         ActivityCompat.startActivity(activity, new Intent(activity, DetailActivity.class), null);
     }
