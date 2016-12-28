@@ -12,19 +12,19 @@ public class HomeModule {
 
     private HomeContract.HomeView homeView;
 
-    HomeModule(HomeContract.HomeView homeView) {
+    public HomeModule(HomeContract.HomeView homeView) {
         this.homeView = homeView;
     }
 
     @Provides
     @CustomScope
-    HomeContract.HomeView providesHomeView() {
+    public HomeContract.HomeView providesHomeView() {
         return homeView;
     }
 
     @Provides
     @CustomScope
-    HomeContract.HomePresenter providesHomePresenter(HomeContract.HomePresenter homePresenter) {
-        return homePresenter;
+    public HomeContract.HomePresenter providesHomePresenter(HomeContract.HomeView homeView) {
+        return new HomePresenter(homeView);
     }
 }

@@ -22,6 +22,12 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        initApplication();
+
+        appComponent = createAppComponent();
+    }
+
+    protected void initApplication() {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
 
@@ -30,18 +36,12 @@ public class BaseApplication extends Application {
                     .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                     .build());
         }
-
-        appComponent = createAppComponent();
     }
 
-    private AppComponent createAppComponent() {
-        if (appComponent == null) {
-            appComponent = DaggerAppComponent.builder()
-                    .appModule(new AppModule())
-                    .build();
-        }
-
-        return appComponent;
+    public AppComponent createAppComponent() {
+        return DaggerAppComponent.builder()
+                .appModule(new AppModule())
+                .build();
     }
 
     public static AppComponent getAppComponent() {

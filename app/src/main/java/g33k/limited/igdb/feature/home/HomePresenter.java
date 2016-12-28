@@ -6,7 +6,7 @@ import javax.inject.Inject;
  * Created by sambains on 19/12/2016.
  */
 
-class HomePresenter implements HomeContract.HomePresenter {
+public class HomePresenter implements HomeContract.HomePresenter {
 
     private HomeContract.HomeView homeView;
 
@@ -21,7 +21,7 @@ class HomePresenter implements HomeContract.HomePresenter {
     }
 
     @Override
-    public void showDetailScreen() {
+    public void onShowDetailButtonClicked() {
         homeView.navigateToDetailScreen();
     }
 }

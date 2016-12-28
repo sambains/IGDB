@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
@@ -10,11 +11,9 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "g33k.limited.igdb.core.EspressoTestRunner"
 
-        jackOptions {
-            enabled true
-        }
+        multiDexEnabled true
 
         buildConfigField "String", "BASE_URL", "\"https://igdbcom-internet-game-database-v1.p.mashape.com/\""
         buildConfigField "String", "API_KEY", "\"1FUFOIxETtmshLFI1KCq37P7xRqwp14WWYTjsnmc6kM7j0lUK4\""
@@ -33,34 +32,67 @@ android {
     }
 }
 
+ext {
+    espressoCore = "2.2.2"
+    mockitoCore = "2.4.2"
+    dexmakerMockito = "2.2.0"
+    dagger = "2.8"
+    jUnit = "4.12"
+
+    stetho = "1.4.2"
+    stethoOkHttp3 = "1.4.2"
+    okHttp3LoggingInterceptor = "3.5.0"
+
+    supportAppCompat = "25.1.0"
+
+    timber = "4.4.0"
+
+    retroLambdaConfig = "2.1.0-jake2"
+
+    butterknife = "8.4.0"
+
+    javaxAnnotation = "10.0-b28"
+
+    rxJava = "2.0.3"
+    rxAndroid = "2.0.1"
+
+    retrofit = "2.1.0"
+    retrofitRxJava = "1.0.0"
+    retrofitGson = "2.1.0"
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile("com.android.support.test.espresso:espresso-core:${espressoCore}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'org.mockito:mockito-core:2.3.11'
-    testCompile 'junit:junit:4.12'
+    androidTestCompile "org.mockito:mockito-core:${mockitoCore}"
+    androidTestCompile "com.linkedin.dexmaker:dexmaker-mockito:${dexmakerMockito}"
+    androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:${dagger}"
+    testCompile "org.mockito:mockito-core:${mockitoCore}"
+    testCompile "junit:junit:${jUnit}"
 
-    debugCompile 'com.facebook.stetho:stetho:1.4.2'
-    debugCompile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
-    debugCompile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+    debugCompile "com.facebook.stetho:stetho:${stetho}"
+    debugCompile "com.facebook.stetho:stetho-okhttp3:${stethoOkHttp3}"
+    debugCompile "com.squareup.okhttp3:logging-interceptor:${okHttp3LoggingInterceptor}"
 
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    compile "com.android.support:appcompat-v7:${supportAppCompat}"
 
-    compile 'com.jakewharton.timber:timber:4.4.0'
+    compile "com.jakewharton.timber:timber:${timber}"
 
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    retrolambdaConfig "com.jakewharton.retrolambda:retrolambda:${retroLambdaConfig}"
 
-    compile 'com.google.dagger:dagger:2.8'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
-    provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile "com.jakewharton:butterknife:${butterknife}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"
 
-    compile 'io.reactivex.rxjava2:rxjava:2.0.3'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile "com.google.dagger:dagger:${dagger}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${dagger}"
+    provided "org.glassfish:javax.annotation:${javaxAnnotation}"
 
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile "io.reactivex.rxjava2:rxjava:${rxJava}"
+    compile "io.reactivex.rxjava2:rxandroid:${rxAndroid}"
+
+    compile "com.squareup.retrofit2:retrofit:${retrofit}"
+    compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:${retrofitRxJava}"
+    compile "com.squareup.retrofit2:converter-gson:${retrofitGson}"
 }

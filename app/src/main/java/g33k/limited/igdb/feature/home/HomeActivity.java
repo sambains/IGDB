@@ -1,7 +1,5 @@
 package g33k.limited.igdb.feature.home;
 
-import android.os.Bundle;
-
 import javax.inject.Inject;
 
 import butterknife.OnClick;
@@ -14,13 +12,6 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
 
     @Inject
     HomePresenter homePresenter;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
 
     @Override
     protected void onDestroy() {
@@ -47,6 +38,6 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
 
     @OnClick(R.id.show_detail)
     void onShowDetailPressed() {
-        homePresenter.showDetailScreen();
+        homePresenter.onShowDetailButtonClicked();
     }
 }

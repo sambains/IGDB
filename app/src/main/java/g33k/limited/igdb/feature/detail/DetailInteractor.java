@@ -15,7 +15,7 @@ import io.reactivex.Observable;
  * Created by sambains on 24/12/2016.
  */
 @CustomScope
-class DetailInteractor implements DetailContract.DetailInteractor {
+public class DetailInteractor implements DetailContract.DetailInteractor {
 
     private Api api;
     private SchedulerProvider schedulerProvider;

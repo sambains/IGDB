@@ -5,12 +5,14 @@ import java.util.List;
 import g33k.limited.igdb.core.base.BasePresenter;
 import g33k.limited.igdb.core.models.Game;
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by sambains on 20/12/2016.
  */
 
-interface DetailContract {
+public interface DetailContract {
 
     interface DetailView {
         void showProgress();

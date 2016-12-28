@@ -12,24 +12,27 @@ import g33k.limited.igdb.core.util.SchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by sambains on 21/12/2016.
+ * Created by sambains on 25/12/2016.
  */
 
-public class DetailInteractorTest {
+public class DetailPresenterTest {
 
+    private DetailContract.DetailView detailView;
     private DetailContract.DetailInteractor detailInteractor;
     private List<Game> expectedResult;
+    private Throwable expectedError;
+    private DetailPresenter detailPresenter;
 
     @Before
     public void setUp() throws Exception {
+        detailView = mock(DetailContract.DetailView.class);
+
         Api api = mock(Api.class);
         SchedulerProvider schedulerProvider = mock(SchedulerProvider.class);
 
@@ -42,6 +45,8 @@ public class DetailInteractorTest {
         expectedResult = new ArrayList<>();
         expectedResult.add(game);
 
+        expectedError = mock(Throwable.class);
+
         when(schedulerProvider.mainThread())
                 .thenReturn(Schedulers.trampoline());
         when(schedulerProvider.backgroundThread())
@@ -51,21 +56,28 @@ public class DetailInteractorTest {
                 .thenReturn(Observable.just(expectedResult));
 
         detailInteractor = new DetailInteractor(api, schedulerProvider);
+        detailPresenter = new DetailPresenter(detailView, detailInteractor);
     }
 
     @Test
-    public void testGameDetailResponse() throws Exception {
-        List<Game> games = detailInteractor.getGame("1020").blockingFirst();
+    public void testGetGame() throws Exception {
+        detailPresenter.getGame("1020");
+        verify(detailView).showProgress();
+        detailInteractor.getGame("1020");
+    }
 
-        assertNotNull(games);
-        assertTrue(games.size() == expectedResult.size());
+    @Test
+    public void testGameDetailsAreShown() throws Exception {
+        detailPresenter.onNext(expectedResult);
+        verify(detailView).showGame(expectedResult.get(0));
+        verify(detailView).hideProgress();
+        verify(detailView).showContent();
+    }
 
-        Game expectedResult = games.get(0);
-        Game actualResult = games.get(0);
-
-        assertEquals(expectedResult.getName(), actualResult.getName());
-        assertEquals(expectedResult.getSummary(), actualResult.getSummary());
-        assertEquals(expectedResult.getStoryline(), actualResult.getStoryline());
-        assertTrue(expectedResult.getRating() == actualResult.getRating());
+    @Test
+    public void testErrorMessageIsShown() throws Exception {
+        detailPresenter.onError(expectedError);
+        verify(detailView).showError(expectedError.getMessage());
+        verify(detailView).hideProgress();
     }
 }

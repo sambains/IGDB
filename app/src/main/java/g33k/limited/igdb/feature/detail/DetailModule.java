@@ -2,7 +2,9 @@ package g33k.limited.igdb.feature.detail;
 
 import dagger.Module;
 import dagger.Provides;
+import g33k.limited.igdb.core.api.Api;
 import g33k.limited.igdb.core.dependencies.CustomScope;
+import g33k.limited.igdb.core.util.SchedulerProvider;
 
 /**
  * Created by sambains on 20/12/2016.
@@ -24,13 +26,13 @@ public class DetailModule {
 
     @Provides
     @CustomScope
-    DetailContract.DetailPresenter providesDetailPresenter(DetailPresenter detailPresenter) {
-        return detailPresenter;
+    DetailContract.DetailPresenter providesDetailPresenter(DetailContract.DetailView detailView, DetailInteractor detailInteractor) {
+        return new DetailPresenter(detailView, detailInteractor);
     }
 
     @Provides
     @CustomScope
-    DetailContract.DetailInteractor providesDetailInteractor(DetailInteractor detailInteractor) {
-        return detailInteractor;
+    DetailContract.DetailInteractor providesDetailInteractor(Api api, SchedulerProvider schedulerProvider) {
+        return new DetailInteractor(api, schedulerProvider);
     }
 }

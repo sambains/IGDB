@@ -1,24 +1,28 @@
 package g33k.limited.igdb.feature.detail;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import g33k.limited.igdb.core.models.Game;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by sambains on 19/12/2016.
  */
 
-class DetailPresenter implements DetailContract.DetailPresenter {
-
-    @Inject
-    DetailContract.DetailInteractor detailInteractor;
+public class DetailPresenter extends DisposableObserver<List<Game>> implements DetailContract.DetailPresenter {
 
     private DetailContract.DetailView detailView;
-    private Disposable disposable;
+    private DetailContract.DetailInteractor detailInteractor;
+    private Disposable disposable = Disposables.empty();
 
     @Inject
-    DetailPresenter(DetailContract.DetailView detailView) {
+    DetailPresenter(DetailContract.DetailView detailView, DetailContract.DetailInteractor detailInteractor) {
         this.detailView = detailView;
+        this.detailInteractor = detailInteractor;
     }
 
     @Override
@@ -28,6 +32,7 @@ class DetailPresenter implements DetailContract.DetailPresenter {
         }
 
         detailView = null;
+
         detailInteractor = null;
     }
 
@@ -36,13 +41,24 @@ class DetailPresenter implements DetailContract.DetailPresenter {
         detailView.showProgress();
 
         disposable = detailInteractor.getGame(gameId)
-                .subscribe(games -> {
-                    detailView.showGame(games.get(0));
-                    detailView.hideProgress();
-                    detailView.showContent();
-                }, throwable -> {
-                    detailView.showError(throwable.getMessage());
-                    detailView.hideProgress();
-                });
+                .subscribeWith(this);
+    }
+
+    @Override
+    public void onNext(List<Game> games) {
+        detailView.showGame(games.get(0));
+        detailView.hideProgress();
+        detailView.showContent();
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        detailView.showError(e.getMessage());
+        detailView.hideProgress();
+    }
+
+    @Override
+    public void onComplete() {
+
     }
 }
