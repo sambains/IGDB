@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
@@ -47,8 +46,6 @@ ext {
 
     timber = "4.4.0"
 
-    retroLambdaConfig = "2.1.0-jake2"
-
     butterknife = "8.4.0"
 
     javaxAnnotation = "10.0-b28"
@@ -79,8 +76,6 @@ dependencies {
     compile "com.android.support:appcompat-v7:${supportAppCompat}"
 
     compile "com.jakewharton.timber:timber:${timber}"
-
-    retrolambdaConfig "com.jakewharton.retrolambda:retrolambda:${retroLambdaConfig}"
 
     compile "com.jakewharton:butterknife:${butterknife}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"
